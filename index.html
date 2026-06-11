@@ -32,18 +32,27 @@
         .section-title { font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 30px; display: flex; align-items: center; gap: 12px; color: var(--accent); }
 
         /* Catalog Table Styling */
-        .table-container { background: var(--bg-card); border-radius: 12px; overflow: hidden; margin-bottom: 60px; border: 1px solid var(--border); }
+        .table-container { background: var(--bg-card); border-radius: 12px; overflow: hidden; margin-bottom: 60px; border: 1px solid var(--border); padding: 20px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: #1e293b; padding: 15px 20px; color: var(--accent); font-size: 14px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 12px 20px; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 14px; }
-        tr:hover td { background: rgba(255, 255, 255, 0.02); color: #fff; }
+        td { padding: 10px 15px; color: var(--text-secondary); font-size: 15px; vertical-align: middle; }
+        tr.chapter-row td { padding-top: 30px; font-size: 1.2rem; font-weight: 700; color: #fff; border-bottom: 2px solid var(--border); }
+        tr.section-row td { padding-top: 15px; font-weight: 600; color: var(--accent); font-size: 1.05rem; }
+        tr.function-row:hover td { background: rgba(56, 189, 248, 0.05); color: #fff; }
+        
+        .toc-entry { display: flex; align-items: baseline; width: 100%; }
+        .toc-dots { flex-grow: 1; border-bottom: 1px dotted var(--border); margin: 0 10px; opacity: 0.5; }
+        
         .btn-link { color: var(--accent); text-decoration: none; font-weight: 500; }
         .btn-link:hover { text-decoration: underline; }
+        .preview-link { font-size: 12px; background: #334155; padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+        .preview-link:hover { background: var(--accent); color: var(--bg-main); text-decoration: none; }
         
         #gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .img-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s; border: 1px solid var(--border); }
         .img-card:hover { transform: scale(1.02); border-color: var(--accent); box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
         .img-container { width: 100%; height: 200px; overflow: hidden; background: #000; }
+        /* Anchors for scrolling offset */
+        .img-card { scroll-margin-top: 100px; }
         .img-card img { width: 100%; height: 100%; object-fit: cover; }
         .img-info { padding: 15px; font-size: 14px; color: var(--text-primary); font-weight: 500; text-align: center; background: #1e293b; border-top: 1px solid var(--border); }
         
@@ -79,16 +88,7 @@
         <div class="section-title">📋 Benchmark Functions Catalog</div>
         
         <div class="table-container">
-            <table id="catalog-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Benchmark Function</th>
-                        <th>Format</th>
-                        <th>Direct Link</th>
-                        <th>Preview</th>
-                    </tr>
-                </thead>
+            <table id="toc-table">
                 <tbody id="catalog-body"></tbody>
             </table>
         </div>
@@ -100,32 +100,122 @@
     <!-- Viewer.js Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js"></script>
     <script>
+        // Hierarchical structure mapping based on the book's contents
+        const bookStructure = [
+            { type: 'chapter', title: 'Chapter 5: Unimodal Functions' },
+            { type: 'section', title: '5.2 The Sphere Function', file: 'sphere_function' },
+            { type: 'section', title: '5.3 Separable Unimodal Functions' },
+            { type: 'func', title: '5.3.1 Axis-Parallel Ellipse Function', file: 'Rotated_Ellipse_Function' }, // Mapped to closest match
+            { type: 'func', title: '5.3.2 Cubic Sum Function', file: 'cube_function' },
+            { type: 'func', title: '5.3.3 Powell Sum Function', file: 'powell_sum_function' },
+            { type: 'func', title: '5.3.4 Schumer-Steiglitz Function', file: 'schumer_steiglitz_function' },
+            { type: 'func', title: '5.3.5 Sum of Squares Function', file: 'Sum_Squares_Function' },
+            { type: 'section', title: '5.4 Non-Separable Unimodal Functions' },
+            { type: 'func', title: '5.4.1 Brown Function', file: 'brown_function' },
+            { type: 'func', title: '5.4.2 Chung Reynolds Function', file: 'Chung_Reynolds_Function' },
+            { type: 'func', title: '5.4.3 Dixon-Price Function', file: 'dixon_price_function' },
+            { type: 'func', title: '5.4.4 Perm Function', file: 'Perm_Function' },
+            { type: 'func', title: '5.4.5 Rosenbrock Function', file: 'rosenbrock_function' },
+            { type: 'func', title: '5.4.6 Schwefel 1.2 Function', file: 'schwefel_1_2_function' },
+            { type: 'func', title: '5.4.8 Zakharov Function', file: 'Zakharov_Function' },
+            { type: 'section', title: '5.5 Non-Smooth and Noisy Unimodal Functions' },
+            { type: 'func', title: '5.5.1 Quartic with Noise Function', file: 'quartic_with_noise_function' },
+            { type: 'func', title: '5.5.2 Schwefel 2.21 Function', file: 'schwefel_2_21_function' },
+            { type: 'func', title: '5.5.3 Schwefel 2.22 Function', file: 'schwefel_2_22_function' },
+            { type: 'func', title: '5.5.4 Step Function', file: 'step_function' },
+            { type: 'section', title: '5.6 Fixed-Dimensional Unimodal Functions' },
+            { type: 'func', title: '5.6.1 Bartels Conn Function', file: 'Bartels_Conn_Function' },
+            { type: 'func', title: '5.6.2 Booth Function', file: 'Booth_Function' },
+            { type: 'func', title: '5.6.3 El-Attar–Vidyasagar–Dutta Function', file: 'el_attar_vidyasagar_dutta_function' },
+            { type: 'func', title: '5.6.4 Leon Function', file: 'Leon_Function' },
+            { type: 'func', title: '5.6.5 Matyas Function', file: 'Matyas_Function' },
+            { type: 'func', title: '5.6.6 Powell Singular Function', file: 'Powell_Singular_Function' },
+            
+            { type: 'chapter', title: 'Chapter 6: Multimodal Functions' },
+            { type: 'section', title: '6.2 Strongly Guided Multimodal Functions' },
+            { type: 'func', title: '6.2.2 Csendes Function', file: 'Csendes_Function' },
+            { type: 'func', title: '6.2.4 Stretched V Sine Wave Function', file: 'Stretched_V_Sine_Wave_Function' },
+            { type: 'section', title: '6.3 Intermediate Multimodal Functions' },
+            { type: 'func', title: '6.3.1 Alpine 2 Function', file: 'Alpine_2_Function' },
+            { type: 'func', title: '6.3.2 Cosine Mixture Function', file: 'Cosine_Mixture_Function' },
+            { type: 'func', title: '6.3.3 Levy Function', file: 'Levy_Function' },
+            { type: 'func', title: '6.3.4 Rastrigin Function', file: 'Rastrigin_Function' },
+            { type: 'func', title: '6.3.6 Weierstrass Function', file: 'Weierstrass_Function' },
+            { type: 'section', title: '6.4 Deceptive Multimodal Functions' },
+            { type: 'func', title: '6.4.1 Alpine 1 Function', file: 'Alpine_1_Function' },
+            { type: 'func', title: '6.4.4 Parsopoulos Function', file: 'Parsopoulos_Function' },
+            { type: 'func', title: '6.4.5 Periodic Function', file: 'Periodic_Function' },
+            { type: 'section', title: '6.5 Fixed-Dimension Multimodal Functions' },
+            { type: 'func', title: '6.5.1 Adjiman Function', file: 'Adjiman_Function' },
+            { type: 'func', title: '6.5.2 Biggs EXP Function', file: 'Biggs_EXP_Function' },
+            { type: 'func', title: '6.5.3 Bird and Mishra Bird', file: 'Mishra_Bird' },
+            { type: 'func', title: '6.5.4 Bohachevsky Family', file: 'Bohachevsky_Function' },
+            { type: 'func', title: '6.5.5 Branin RCOS Function', file: 'Branin_RCOS_Function' },
+            { type: 'func', title: '6.5.6 Bukin 6 Function', file: 'Bukin_Function' },
+            { type: 'func', title: '6.5.7 Cross-in-Tray Function', file: 'Cross-in-Tray_Function' },
+            { type: 'func', title: '6.5.9 Deckkers-Aarts Function', file: 'Deckkers-Aarts_Function' },
+            { type: 'func', title: '6.5.10 Egg Crate Function', file: 'Egg_Crate_Function' },
+            { type: 'func', title: '6.5.11 Egg Holder Function', file: 'Egg_Holder_Function' },
+            { type: 'func', title: '6.5.12 Goldstein-Price Function', file: 'Goldstein-Price_Function' },
+            { type: 'func', title: '6.5.13 Hartmann Function', file: 'Hartmann_Function' },
+            { type: 'func', title: '6.5.14 Hosaki Function', file: 'Hosaki_Function' },
+            { type: 'func', title: '6.5.15 Keane Function', file: 'Keane_Function' },
+            { type: 'func', title: '6.5.17 Schaffer F6 Function', file: 'Plot_F6' },
+            { type: 'func', title: '6.5.19 Six-Hump Camel Function', file: 'Six-Hump_Camel_Function' },
+            { type: 'func', title: '6.5.20 Vincent Function', file: 'Vincent_Function' }
+        ];
+
         fetch('images.json')
             .then(res => res.json())
             .then(data => {
                 const gallery = document.getElementById('gallery');
                 const tableBody = document.getElementById('catalog-body');
                 
-                data.forEach((path, index) => {
-                    const isImage = path.toLowerCase().match(/\.(png|jpg|jpeg|gif)$/);
+                // Build the hierarchical Catalog Table
+                bookStructure.forEach((item) => {
+                    const row = document.createElement('tr');
+                    
+                    if (item.type === 'chapter') {
+                        row.className = 'chapter-row';
+                        row.innerHTML = `<td colspan="2">${item.title}</td>`;
+                    } else if (item.type === 'section') {
+                        row.className = 'section-row';
+                        row.innerHTML = `<td colspan="2" style="padding-left:30px;">${item.title}</td>`;
+                    } else {
+                        row.className = 'function-row';
+                        // Find the matching path from images.json
+                        const imgPath = data.find(p => p.toLowerCase().includes(item.file.toLowerCase()) && p.endsWith('.png'));
+                        
+                        if (imgPath) {
+                            const elementId = `item-${item.file}`;
+                            row.innerHTML = `
+                                <td style="padding-left:60px;">
+                                    <div class="toc-entry">
+                                        <a href="details.html?img=${encodeURIComponent(imgPath)}" class="btn-link">${item.title}</a>
+                                        <div class="toc-dots"></div>
+                                    </div>
+                                </td>
+                                <td style="text-align:right;">
+                                    <a href="#${elementId}" class="btn-link preview-link">Jump to Preview ↓</a>
+                                </td>
+                            `;
+                        } else {
+                            row.innerHTML = `<td style="padding-left:60px; opacity:0.5;">${item.title} (Plot Pending)</td><td></td>`;
+                        }
+                    }
+                    tableBody.appendChild(row);
+                });
+
+                // Build the Visual Preview Gallery (Flat list of all available PNGs)
+                data.filter(p => p.toLowerCase().endsWith('.png')).forEach(path => {
                     const fileName = path.split('/').pop().replace(/\.[^/.]+$/, "");
                     const cleanName = fileName.replace(/_/g, ' ');
-                    const extension = path.split('.').pop().toUpperCase();
-                    const elementId = `item-${fileName.replace(/\s+/g, '-')}`;
+                    const elementId = `item-${fileName}`;
 
-                    // Add row to Table
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td style="color:#fff; font-weight:500;"><a href="details.html?img=${encodeURIComponent(path)}" class="btn-link">${cleanName}</a></td>
-                        <td><span style="background:#334155; padding:2px 6px; border-radius:4px; font-size:11px;">${extension}</span></td>
-                        <td><a href="${path}" target="_blank" class="btn-link">Open File</a></td>
-                        <td>${isImage ? `<a href="#${elementId}" class="btn-link">Jump to Preview ↓</a>` : 'N/A'}</td>
-                    `;
-                    tableBody.appendChild(row);
-
-                    // Add card to Gallery (Images only)
-                    if (isImage) {
+                    // Only add to gallery if we have a match in our book structure to keep it clean
+                    const knownItem = bookStructure.find(s => s.file && fileName.toLowerCase().includes(s.file.toLowerCase()));
+                    
+                    if (knownItem) {
                         const card = document.createElement('div');
                         card.className = 'img-card';
                         card.id = elementId;
