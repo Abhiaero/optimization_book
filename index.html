@@ -17,21 +17,23 @@
         }
         html { scroll-behavior: smooth; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-main); margin: 0; padding: 0; color: var(--text-primary); }
-        header { background: #111827; border-bottom: 1px solid var(--border); padding: 80px 20px; text-align: center; }
+        header { background: #111827; border-bottom: 1px solid var(--border); padding: 80px 20px; }
+        .header-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 60px; }
+        .header-content { flex: 1; }
         .publisher { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-size: 13px; }
         .date { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
         
         /* Book Cover Styling */
-        .cover-wrapper { margin-bottom: 40px; display: inline-block; cursor: zoom-in; transition: transform 0.3s ease; }
+        .cover-wrapper { display: inline-block; cursor: zoom-in; transition: transform 0.3s ease; flex-shrink: 0; }
         .cover-wrapper:hover { transform: translateY(-5px); }
-        .book-cover { width: 220px; border-radius: 4px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4); border: 1px solid var(--border); }
+        .book-cover { width: 300px; border-radius: 4px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4); border: 1px solid var(--border); }
         
         h1 { font-size: 2.8rem; color: #fff; margin: 0 0 10px 0; line-height: 1.2; }
         h2 { font-size: 1.6rem; color: var(--text-secondary); font-weight: 400; margin: 0 0 30px 0; }
-        .authors { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; flex-wrap: wrap; }
+        .authors { display: flex; gap: 40px; margin-bottom: 30px; flex-wrap: wrap; }
         .author-name { font-weight: 600; color: var(--text-primary); display: block; }
         .author-loc { font-size: 13px; color: var(--text-secondary); }
-        .description-box { max-width: 800px; margin: 0 auto; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent); padding: 25px; border-radius: 0 12px 12px 0; text-align: left; }
+        .description-box { max-width: 800px; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent); padding: 25px; border-radius: 0 12px 12px 0; text-align: left; }
         .description-text { line-height: 1.8; font-style: italic; color: var(--text-secondary); font-size: 1.1rem; }
         
         main { max-width: 1300px; margin: 60px auto; padding: 0 20px; }
@@ -68,28 +70,31 @@
 <body>
 
     <header>
-        <div class="cover-wrapper" id="book-cover-viewer">
-            <img src="new_cover1.jpg" alt="Book Cover" class="book-cover">
-        </div>
-
-        <div class="publisher">Springer Nature • May 27, 2026</div>
-        <h1>Benchmark Functions in Continuous Optimization</h1>
-        <h2>Volume I — Single-Objective Problems</h2>
-        
-        <div class="authors">
-            <div>
-                <span class="author-name">Kusum Deep</span>
-                <span class="author-loc">Roorkee, India</span>
+        <div class="header-container">
+            <div class="cover-wrapper" id="book-cover-viewer">
+                <img src="new_cover1.jpg" alt="Book Cover" class="book-cover">
             </div>
-            <div>
-                <span class="author-name">Kanchan Rajwar</span>
-                <span class="author-loc">Pretoria, South Africa</span>
-            </div>
-        </div>
+            <div class="header-content">
+                <div class="publisher">Springer Nature • May 27, 2026</div>
+                <h1>Benchmark Functions in Continuous Optimization</h1>
+                <h2>Volume I — Single-Objective Problems</h2>
+                
+                <div class="authors">
+                    <div>
+                        <span class="author-name">Kusum Deep</span>
+                        <span class="author-loc">Roorkee, India</span>
+                    </div>
+                    <div>
+                        <span class="author-name">Kanchan Rajwar</span>
+                        <span class="author-loc">Pretoria, South Africa</span>
+                    </div>
+                </div>
 
-        <div class="description-box">
-            <div class="description-text">
-                A complete laboratory manual for rigorous evaluation of metaheuristics, evolutionary algorithms, and swarm intelligence methods.
+                <div class="description-box">
+                    <div class="description-text">
+                        A complete laboratory manual for rigorous evaluation of metaheuristics, evolutionary algorithms, and swarm intelligence methods.
+                    </div>
+                </div>
             </div>
         </div>
     </header>
