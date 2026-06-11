@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Details - Benchmark Functions</title>
+    <!-- Viewer.js CSS for interactive plot viewing -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css">
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --accent: #38bdf8;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-main); color: var(--text-primary); margin: 0; padding: 0; }
+        nav { padding: 20px 40px; background: #111827; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+        .back-btn { color: var(--accent); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .back-btn:hover { text-decoration: underline; }
+        
+        main { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: #fff; }
+        .meta { color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem; border-left: 4px solid var(--accent); padding-left: 20px; }
+        
+        .content-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .content-card { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); padding: 40px; }
+        h3 { color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; margin-top: 0; }
+        
+        .image-viewer-container { background: #000; border-radius: 12px; overflow: hidden; margin-top: 20px; cursor: zoom-in; border: 1px solid var(--border); }
+        #target-image { width: 100%; display: block; max-height: 80vh; object-fit: contain; }
+        
+        .description { line-height: 1.8; color: var(--text-secondary); font-size: 1.1rem; }
+        footer { text-align: center; padding: 60px; color: var(--text-secondary); font-size: 13px; opacity: 0.6; border-top: 1px solid var(--border); margin-top: 80px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="back-btn">← Back to Catalog</a>
+    </nav>
+
+    <main>
+        <h1 id="func-name">Loading...</h1>
+        <div class="meta">Benchmark Function Analysis • Single-Objective Problems</div>
+
+        <div class="content-grid">
+            <div class="content-card">
+                <h3>Technical Description</h3>
+                <div class="description" id="func-desc">
+                    This function is part of the "Benchmark Functions in Continuous Optimization" catalog. 
+                    It is used for the rigorous evaluation of metaheuristics, evolutionary algorithms, and swarm intelligence methods. 
+                    The visualization below provides both the 3D surface landscape and the corresponding contour plot for analytical review.
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3>Visualization (Interactive)</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px;">Click the image below to enter full-screen mode to zoom, pan, and rotate the plot.</p>
+                <div class="image-viewer-container" id="image-wrapper">
+                    <img id="target-image" src="" alt="Function Plot">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © 2026 Springer Nature • Kusum Deep & Kanchan Rajwar<br>
+        Benchmark Functions in Continuous Optimization
+    </footer>
+
+    <!-- Viewer.js Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js"></script>
+    <script>
+        // 1. Get image path from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        let imgPath = urlParams.get('img');
+
+        if (imgPath) {
+            // Clean up name for display (e.g., "Adjiman_Function.png" -> "Adjiman Function")
+            const fileName = imgPath.split('/').pop().replace(/\.[^/.]+$/, "");
+            const cleanName = fileName.replace(/_/g, ' ');
+            
+            document.getElementById('func-name').textContent = cleanName;
+            document.title = `${cleanName} - Benchmark Analysis`;
+
+            // Viewer.js handles images; if the catalog points to a PDF, we try to show the PNG equivalent
+            const displayImg = imgPath.toLowerCase().endsWith('.pdf') 
+                               ? imgPath.replace('.pdf', '.png') 
+                               : imgPath;
+
+            const imgElement = document.getElementById('target-image');
+            imgElement.src = displayImg;
+
+            // 2. Initialize Viewer.js for interactive plot exploration
+            const viewer = new Viewer(document.getElementById('image-wrapper'), {
+                inline: false,
+                navbar: false,
+                title: false,
+                toolbar: {
+                    zoomIn: 4,
+                    zoomOut: 4,
+                    oneToOne: 4,
+                    reset: 4,
+                    rotateLeft: 4,
+                    rotateRight: 4,
+                    flipHorizontal: 4,
+                    flipVertical: 4,
+                },
+            });
+        } else {
+            document.getElementById('func-name').textContent = "Function Not Found";
+            document.getElementById('func-desc').textContent = "Please return to the main catalog and select a benchmark function to view details.";
+        }
+    </script>
+</body>
+</html>

@@ -117,7 +117,7 @@
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td style="color:#fff; font-weight:500;">${cleanName}</td>
+                        <td style="color:#fff; font-weight:500;"><a href="details.html?img=${encodeURIComponent(path)}" class="btn-link">${cleanName}</a></td>
                         <td><span style="background:#334155; padding:2px 6px; border-radius:4px; font-size:11px;">${extension}</span></td>
                         <td><a href="${path}" target="_blank" class="btn-link">Open File</a></td>
                         <td>${isImage ? `<a href="#${elementId}" class="btn-link">Jump to Preview ↓</a>` : 'N/A'}</td>
