@@ -20,6 +20,12 @@
         header { background: #111827; border-bottom: 1px solid var(--border); padding: 80px 20px; text-align: center; }
         .publisher { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-size: 13px; }
         .date { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+        
+        /* Book Cover Styling */
+        .cover-wrapper { margin-bottom: 40px; display: inline-block; cursor: zoom-in; transition: transform 0.3s ease; }
+        .cover-wrapper:hover { transform: translateY(-5px); }
+        .book-cover { width: 220px; border-radius: 4px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4); border: 1px solid var(--border); }
+        
         h1 { font-size: 2.8rem; color: #fff; margin: 0 0 10px 0; line-height: 1.2; }
         h2 { font-size: 1.6rem; color: var(--text-secondary); font-weight: 400; margin: 0 0 30px 0; }
         .authors { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; flex-wrap: wrap; }
@@ -62,6 +68,10 @@
 <body>
 
     <header>
+        <div class="cover-wrapper" id="book-cover-viewer">
+            <img src="new_cover1.jpg" alt="Book Cover" class="book-cover">
+        </div>
+
         <div class="publisher">Springer Nature • May 27, 2026</div>
         <h1>Benchmark Functions in Continuous Optimization</h1>
         <h2>Volume I — Single-Objective Problems</h2>
@@ -245,6 +255,16 @@
                     toolbar: true,
                     transition: true,
                     title: (image) => image.alt
+                });
+
+                // Initialize Viewer.js specifically for the Book Cover
+                new Viewer(document.getElementById('book-cover-viewer'), {
+                    navbar: false,
+                    toolbar: true,
+                    title: false,
+                    tooltip: true,
+                    movable: true,
+                    zoomable: true
                 });
             })
             .catch(err => console.error("Error loading images.json:", err));
