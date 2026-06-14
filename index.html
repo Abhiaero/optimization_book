@@ -69,6 +69,10 @@
 </head>
 <body>
 
+    <div style="color: #ef4444; text-align: center; font-weight: bold; padding: 15px; background: #111827; border-bottom: 1px solid var(--border); font-size: 1.1rem;">
+        This website is under construction.
+    </div>
+
     <header>
         <div class="header-container">
             <div class="cover-wrapper" id="book-cover-viewer">
@@ -275,58 +279,9 @@
             .catch(err => console.error("Error loading images.json:", err));
     </script>
 
-    <footer>
-        © 2026 Springer Nature. Benchmark Functions in Continuous Optimization.<br>
-        Rigorous Laboratory Manual for Swarm Intelligence & Evolutionary Algorithms.
+    <footer style="padding: 60px 40px; border-top: 1px solid var(--border); background: #111827; margin-top: 80px; text-align: center;">
     </footer>
 </body>
 </html>
-                    
-                    const wrap = document.createElement('div');
-                    wrap.className = 'img-container';
-                    
-                    const img = document.createElement('img');
-                    img.src = path;
-                    // Clean up filename for display: remove extension and underscores
-                    const fileName = path.split('/').pop().replace(/\.[^/.]+$/, "");
-                    img.alt = fileName.replace(/_/g, ' ');
-                    img.loading = 'lazy';
-                    
-                    const info = document.createElement('div');
-                    info.className = 'img-info';
-                    info.textContent = img.alt;
-                    
-                    wrap.appendChild(img);
-                    card.appendChild(wrap);
-                    card.appendChild(info);
-                    container.appendChild(card);
-                });
-
-                // Initialize Viewer.js on the gallery container
-                new Viewer(container, {
-                    url: 'src',
-                    toolbar: {
-                        zoomIn: 4,
-                        zoomOut: 4,
-                        oneToOne: 4,
-                        reset: 4,
-                        prev: 4,
-                        play: { show: 4, size: 'large' },
-                        next: 4,
-                        rotateLeft: 4,
-                        rotateRight: 4,
-                        flipHorizontal: 4,
-                        flipVertical: 4,
-                    },
-                    transition: true,
-                    title: (image) => `${image.alt}`
-                });
-            })
-            .catch(err => console.error("Could not load images.json. Ensure the file exists and is populated.", err));
-    </script>
-
-    <footer>
-        © 2026 Springer Nature. Benchmark Functions in Continuous Optimization.
-    </footer>
 </body>
 </html>
